@@ -13,12 +13,18 @@ require(boot)
 require(ExtDist)
 require(evd)
 #######################################################################
+#set.seed(2895)
 #sample   <- abs( arima.sim(n = 8000, list(ar=0.5, ma=0), rand.gen=function(n) rt(n,df=4) ) )
-#alphaestimator(sample, plot=TRUE , R0 = 50,  hill=TRUE,   k1 = 1000 )
-#alphaestimator(sample, plot=TRUE , R0 = 100, hill=FALSE,  k1 = 1000 )
+#alphaestimator(sample, plot=TRUE , R0 = 100,  hill=TRUE,   k1 = 1000 )
+#alphaestimator(sample, plot=TRUE , R0 = 100,  hill=FALSE,  k1 = 1000 )
 #abline(h=0.25,col = "red")
 #######################################################################
-## Main functions
+## Main functions: 
+##      - alphaestimator2: results from fExtreme code.
+##      - alphaestimator:  unbiased Hill estimator with tuning parameter rho = 2 implementation.
+
+#######################################################################
+## alphaestimator2
 ## shaparmPlot function on fExtremes
 ## Mean : Pickands, Hill and DeHaan estimator at 96th empirical quantile.
 alphaestimator2 <- function(path0){
@@ -27,7 +33,14 @@ alphaestimator2 <- function(path0){
   alpha  <- sum(alpha1)/3
   return(alpha)
 }
-alphaestimator  <- function(sample,plot=FALSE,k1=floor(n^(0.7)),R0=1,hill=FALSE,ylim0=NULL){
+
+#######################################################################
+## alphaestimator
+##
+## Parameters: 
+##        sample -> path of nonnegative entries : no NA.
+##        k1     -> order statistics to consider.  
+alphaestimator  <- function(sample,k1=floor(n^(0.7)),plot=FALSE,R0=1,hill=FALSE,ylim0=NULL){
   ### n + transforms to log
   n          <- length(sample)
   lsorted    <- log(sort(sample)) 
@@ -41,7 +54,7 @@ alphaestimator  <- function(sample,plot=FALSE,k1=floor(n^(0.7)),R0=1,hill=FALSE,
   al2       <- es$hill                              ## Hill estimator
   ################## Defyining Bootstrap statistic
   stathill2        <- function(data){
-     lpath      <- log(sort(data))
+     lpath         <- log(sort(data))
      ind <- c(0.6,0.7,0.8,0.9)
      j   <- 1
      es  <- NULL
