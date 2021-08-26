@@ -16,16 +16,16 @@ n <- 4000
 a <- NULL
 N <- 500
 ### Simulation from different models
-for(i in 1:N) a <- c(a,alphaestimator(rBurr(n,1,2,2), k1=n^0.7)$xi)
+for(i in 1:N) a <- c(a,alphaestimator(rBurr(n,1,2,2), k1=floor(n^0.7))$xi)
 a2 <- NULL
-for(i in 1:N) a2 <- c(a2,alphaestimator(rfrechet(n,shape=4), k1=n^0.9)$xi)
+for(i in 1:N) a2 <- c(a2,alphaestimator(rfrechet(n,shape=4),k1=floor(n^0.9))$xi)
 a3 <- NULL
-for(i in 1:N) a3 <- c(a3,alphaestimator(ARMAX1(0.7,n,al=4),k1=n^0.9)$xi)
+for(i in 1:N) a3 <- c(a3,alphaestimator(ARMAX1(0.7,n,al=4),k1=floor(n^0.9))$xi)
 a4 <- NULL
-for(i in 1:N) a4 <- c(a4,alphaestimator(ARMAX1(0.8,n,al=4),k1=n^0.9)$xi)
+for(i in 1:N) a4 <- c(a4,alphaestimator(ARMAX1(0.8,n,al=4),k1=floor(n^0.9))$xi)
 a5 <- NULL
-for(i in 1:N) a5<- c(a5,alphaestimator(abs(rt(n,df=4)),k1=n^0.7)$xi)
-### Plot 
+for(i in 1:N) a5<- c(a5,alphaestimator(abs(rt(n,df=4)),k1=floor(n^0.7))$xi)
+### Plot Boxplot results
 {
   al <- cbind(a/0.25, rep("BURR(1,2,2)",N) )
   al <- rbind(al, cbind(a2/0.25, rep("FRECHET(4)",N)) )
@@ -45,3 +45,5 @@ for(i in 1:N) a5<- c(a5,alphaestimator(abs(rt(n,df=4)),k1=n^0.7)$xi)
     theme(axis.text.x = element_text(angle = 45,hjust = 1),
           plot.title = element_text(color="black", size=15, face="bold"))
 }
+
+
