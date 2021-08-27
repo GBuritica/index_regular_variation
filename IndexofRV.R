@@ -33,7 +33,6 @@ alphaestimator2 <- function(path0){
   alpha  <- sum(alpha1)/3
   return(alpha)
 }
-
 #######################################################################
 ## alphaestimator
 ##
