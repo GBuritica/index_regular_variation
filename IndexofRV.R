@@ -42,7 +42,7 @@ alphaestimator2 <- function(path0){
 alphaestimator  <- function(sample,k1=floor(n^(0.7)),plot=FALSE,R0=1,hill=FALSE,ylim0=NULL){
   ### n + transforms to log
   n          <- length(sample)
-  lsorted    <- log(sort(sample)) 
+  lsorted    <- log(sort(abs(sample))) 
   #################### Estimating rho parameter 
   krhomax   <- floor( min( (sum(!lsorted==-Inf)-1),n, 2*n/log(log(n)) ) ) ## limits for the k(rho)
   rhoes     <- sapply( 2:min(krhomax, max(floor(n^0.7),k1)  ) , function(l) rho_Estimate2( l, lsorted , n  ) )
@@ -95,7 +95,7 @@ alphaestimator  <- function(sample,k1=floor(n^(0.7)),plot=FALSE,R0=1,hill=FALSE,
     es   <- rbind(es,gammaes2(lsorted, n,rhohat, (floor(n^ind[j-1])+1):k1 )) 
     ##################
     ################## Bootstrap
-    b          <-  tsboot(sample,statistic=stathill, R=R0, sim = "geom", l = 100 )
+    b          <-  tsboot(sample,statistic=stathill, R=R0, sim = "geom", l = 200 )
     IC1        <-  sapply(1:length(es$hill) , function(l)  boot.ci(b,  type = "perc", index = l )$percent[4:5] )
     IC2        <-  sapply(1:length(es$hill) , function(l)  boot.ci(b,  type = "perc", index = (length(es$hill) + l)  )$percent[4:5] )
     ################## Plots
@@ -128,7 +128,6 @@ alphaestimator  <- function(sample,k1=floor(n^(0.7)),plot=FALSE,R0=1,hill=FALSE,
   
   return( data.frame("xi"=al))
 }
-
 
 #######################################################################
 ## Auxiliar fct. for unbiased Hill estimator in De Haan - Mercadier - Zhou
