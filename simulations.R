@@ -13,25 +13,25 @@ library(ExtDist)
 #######################################################################
 ### Parameters
 n <- 4000
-a <- NULL
-N <- 500
+N <- 1000
 ### Simulation from different models
-for(i in 1:N) a <- c(a,alphaestimator(rBurr(n,1,2,2), k1=floor(150))$xi)
+a <- NULL
+for(i in 1:N) a <- c(a,alphaestimator(rBurr(n,1,2,2), k1=floor(n^0.7))$xi)
 a2 <- NULL
-for(i in 1:N) a2 <- c(a2,alphaestimator(rfrechet(n,shape=4),k1=floor(400))$xi)
+for(i in 1:N) a2 <- c(a2,alphaestimator(rfrechet(n,shape=4),k1=floor(n^0.7))$xi)
 a3 <- NULL
-for(i in 1:N) a3 <- c(a3,alphaestimator(ARMAX1(0.7,n,al=4),k1=floor(800))$xi)
+for(i in 1:N) a3 <- c(a3,alphaestimator(ARMAX1(0.7,n,al=4),k1=floor(n^0.7))$xi)
 a4 <- NULL
-for(i in 1:N) a4 <- c(a4,alphaestimator(ARMAX1(0.8,n,al=4),k1=floor(400))$xi)
+for(i in 1:N) a4 <- c(a4,alphaestimator(ARMAX1(0.8,n,al=4),k1=floor(n^0.7))$xi)
 a5 <- NULL
-for(i in 1:N) a5<- c(a5,alphaestimator(abs(rt(n,df=4)),k1=floor(100))$xi)
-### Plot Boxplot results
+for(i in 1:N) a5<- c(a5,alphaestimator(abs(abs(rlgamma(n,location=1,scale=1,shape=4))),k1=floor(n^0.7))$xi)
+ ### Plot Boxplot results
 {
-  al <- cbind(a/0.25, rep("BURR(1,2,2)",N) )
-  al <- rbind(al, cbind(a2/0.25, rep("FRECHET(4)",N)) )
+  al <- cbind(a/0.25, rep("Burr(2,2)",N) )
+  al <- rbind(al, cbind(a2/0.25, rep("Fréchet(4)",N)) )
   al <- rbind(al, cbind(a3/0.25, rep("ARMAX(0.7)",N)))
   al <- rbind(al, cbind(a4/0.25, rep("ARMAX(0.8)",N)))
-  al <- rbind(al, cbind(a5/0.25, rep("STUDENT",N)))
+#  al <- rbind(al, cbind(a5/0.25, rep("STUDENT",N)))
   al <- as.data.frame(al)
   names(al) <- c("stat", "type")
   
@@ -39,12 +39,12 @@ for(i in 1:N) a5<- c(a5,alphaestimator(abs(rt(n,df=4)),k1=floor(100))$xi)
     geom_boxplot(alpha = 0.3, fill = "grey") +
     geom_hline(yintercept = 1, lty = 2)+ ylim(0.25,1.75)+
     theme_classic() + xlab("") + ylab("")+
-    ggtitle("Gamma")+
+    ggtitle(" ")+
     scale_x_discrete(name ="", 
-                     limits=c("BURR(1,2,2)","FRECHET(4)","ARMAX(0.7)","ARMAX(0.8)","STUDENT"))+
+                     limits=c("Burr(2,2)","Fréchet(4)","ARMAX(0.7)","ARMAX(0.8)"))+
     theme(axis.text.x = element_text(angle = 45,hjust = 1),
           plot.title = element_text(color="black", size=15, face="bold"))
 }
 par(mfrow=c(1,1))
-boxplot(a5/0.25)
+boxplot(a5)
 abline(h=1)
