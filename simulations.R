@@ -25,6 +25,9 @@ a4 <- NULL
 for(i in 1:N) a4 <- c(a4,alphaestimator(ARMAX1(0.8,n,al=4),k1=floor(n^0.7))$xi)
 a5 <- NULL
 for(i in 1:N) a5<- c(a5,alphaestimator(abs(abs(rlgamma(n,location=1,scale=1,shape=4))),k1=floor(n^0.7))$xi)
+a6 <- NULL
+for(i in 1:N) a6<- c(a6,alphaestimator(abs(rt(n, df=1.3)),k1=floor(n^0.8))$xi)
+
  ### Plot Boxplot results
 {
   al <- cbind(a/0.25, rep("Burr(2,2)",N) )
@@ -45,6 +48,6 @@ for(i in 1:N) a5<- c(a5,alphaestimator(abs(abs(rlgamma(n,location=1,scale=1,shap
     theme(axis.text.x = element_text(angle = 45,hjust = 1),
           plot.title = element_text(color="black", size=15, face="bold"))
 }
-par(mfrow=c(1,1))
-boxplot(a5)
-abline(h=1)
+#par(mfrow=c(2,3))
+boxplot(a6, ylim = c(0.5,1.1))
+abline(h=1/1.3)
