@@ -129,6 +129,7 @@ alphaestimator  <- function(sample,k1=floor(n^(0.7)),plot=FALSE,R0=1,hill=FALSE,
   return( data.frame("xi"=al))
 }
 
+
 #######################################################################
 ## Auxiliar fct. for unbiased Hill estimator in De Haan - Mercadier - Zhou
 ##
